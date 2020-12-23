@@ -10,25 +10,7 @@ basic.showLeds(`
     `)
 basic.forever(function () {
     x = input.acceleration(Dimension.X)
-    if (input.buttonIsPressed(Button.AB)) {
-        basic.showLeds(`
-            . . . . .
-            . . # . .
-            . . . . .
-            . . . . .
-            . . . . .
-            `)
-        radio.sendNumber(0)
-    } else if (input.buttonIsPressed(Button.A)) {
-        basic.showLeds(`
-            . . . . .
-            . . . . .
-            . . . . .
-            . . # . .
-            . . . . .
-            `)
-        radio.sendNumber(1)
-    } else if (input.buttonIsPressed(Button.B)) {
+    if (input.buttonIsPressed(Button.A)) {
         basic.showLeds(`
             . . . . .
             . . . . .
@@ -36,8 +18,8 @@ basic.forever(function () {
             . . . . .
             . . . . .
             `)
-        radio.sendNumber(2)
-    } else if (x < 0) {
+        radio.sendNumber(1)
+    } else if (input.buttonIsPressed(Button.B)) {
         basic.showLeds(`
             . . . . .
             . . . . .
@@ -45,7 +27,7 @@ basic.forever(function () {
             . . . . .
             . . . . .
             `)
-        radio.sendNumber(3)
+        radio.sendNumber(2)
     } else {
         basic.showLeds(`
             . . . . .
@@ -54,6 +36,6 @@ basic.forever(function () {
             . # . # .
             . . . . .
             `)
-        radio.sendNumber(4)
+        radio.sendNumber(0)
     }
 })
