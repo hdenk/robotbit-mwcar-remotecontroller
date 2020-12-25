@@ -1,4 +1,5 @@
-let x = 0
+let accY = 0
+let accX = 0
 radio.setGroup(0)
 radio.setTransmitPower(7)
 basic.showLeds(`
@@ -9,8 +10,9 @@ basic.showLeds(`
     . . . . .
     `)
 basic.forever(function () {
-    x = input.acceleration(Dimension.X)
-    if (input.buttonIsPressed(Button.A)) {
+    accX = input.acceleration(Dimension.X)
+    accY = input.acceleration(Dimension.Y)
+    if (accX < -256) {
         basic.showLeds(`
             . . . . .
             . . . . .
@@ -19,7 +21,7 @@ basic.forever(function () {
             . . . . .
             `)
         radio.sendNumber(1)
-    } else if (input.buttonIsPressed(Button.B)) {
+    } else if (accX > 256) {
         basic.showLeds(`
             . . . . .
             . . . . .
@@ -28,6 +30,24 @@ basic.forever(function () {
             . . . . .
             `)
         radio.sendNumber(2)
+    } else if (accY < -256) {
+        basic.showLeds(`
+            . . . . .
+            . . # . .
+            . . . . .
+            . . . . .
+            . . . . .
+            `)
+        radio.sendNumber(3)
+    } else if (accY > 256) {
+        basic.showLeds(`
+            . . . . .
+            . . . . .
+            . . . . .
+            . . # . .
+            . . . . .
+            `)
+        radio.sendNumber(4)
     } else {
         basic.showLeds(`
             . . . . .
