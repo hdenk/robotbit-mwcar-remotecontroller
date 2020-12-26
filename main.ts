@@ -7,6 +7,14 @@ function accelerationSector (angle: number) {
         return 3
     } else if (angle > 60 && angle < 120) {
         return 4
+    } else if (angle < -120 && angle > -150) {
+        return 5
+    } else if (angle < -30 && angle > -60) {
+        return 6
+    } else if (angle > 30 && angle < 60) {
+        return 7
+    } else if (angle > 120 && angle < 150) {
+        return 8
     } else {
         return 0
     }
@@ -47,12 +55,44 @@ function accelerationImage (sector: number) {
             . . # . .
             . . . . .
             `)
+    } else if (sector == 5) {
+        return images.createImage(`
+            . . . . .
+            . # . . .
+            . . . . .
+            . . . . .
+            . . . . .
+            `)
+    } else if (sector == 6) {
+        return images.createImage(`
+            . . . . .
+            . . . # .
+            . . . . .
+            . . . . .
+            . . . . .
+            `)
+    } else if (sector == 7) {
+        return images.createImage(`
+            . . . . .
+            . . . . .
+            . . . . .
+            . . . # .
+            . . . . .
+            `)
+    } else if (sector == 8) {
+        return images.createImage(`
+            . . . . .
+            . . . . .
+            . . . . .
+            . # . . .
+            . . . . .
+            `)
     } else {
         return images.createImage(`
             . . . . .
-            . . # . .
-            . # # # .
-            . . # . .
+            . . . . .
+            . . . . .
+            . . . . .
             . . . . .
             `)
     }
@@ -69,13 +109,6 @@ let PI = 0
 radio.setGroup(0)
 radio.setTransmitPower(7)
 PI = 3.14159265359
-basic.showLeds(`
-    . . . . .
-    . . # . .
-    . # # # .
-    . . # . .
-    . . . . .
-    `)
 basic.forever(function () {
     accX = input.acceleration(Dimension.X)
     accY = input.acceleration(Dimension.Y)
@@ -85,5 +118,13 @@ basic.forever(function () {
     if (accAmount > 256) {
         accelerationImage(accSector).showImage(0)
         radio.sendNumber(accSector)
+    } else {
+        basic.showLeds(`
+            . . . . .
+            . . # . .
+            . # # # .
+            . . # . .
+            . . . . .
+            `)
     }
 })
