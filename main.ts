@@ -22,6 +22,9 @@ function accelerationSector (angle: number) {
 function accelerationAmount (x: number, y: number) {
     return Math.trunc(Math.sqrt(x * x + y * y))
 }
+function calculateTransmitData (amount: number, sector: number) {
+    return sector * 1000 + amount
+}
 function accelerationImage (sector: number) {
     if (sector == 1) {
         return images.createImage(`
@@ -117,7 +120,7 @@ basic.forever(function () {
     accSector = accelerationSector(accAngle)
     if (accAmount > 256) {
         accelerationImage(accSector).showImage(0)
-        radio.sendNumber(accAmount * 1000 + accSector)
+        radio.sendNumber(calculateTransmitData(accSector, accAmount))
     } else {
         basic.showLeds(`
             . . . . .
