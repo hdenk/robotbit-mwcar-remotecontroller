@@ -90,10 +90,10 @@ function accelerationImage (sector: number) {
     } else {
         return images.createImage(`
             . . . . .
+            . # . # .
             . . . . .
-            . . . . .
-            . . . . .
-            . . . . .
+            . # # # .
+            # . . . #
             `)
     }
 }
@@ -117,7 +117,7 @@ basic.forever(function () {
     accSector = accelerationSector(accAngle)
     if (accAmount > 256) {
         accelerationImage(accSector).showImage(0)
-        radio.sendNumber(accSector)
+        radio.sendNumber(accAmount * 1000 + accSector)
     } else {
         basic.showLeds(`
             . . . . .
@@ -126,5 +126,6 @@ basic.forever(function () {
             . . # . .
             . . . . .
             `)
+        radio.sendNumber(0)
     }
 })
