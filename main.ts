@@ -19,13 +19,41 @@ function accelerationSector (angle: number) {
         return 0
     }
 }
+function calCButtonState () {
+    if (input.buttonIsPressed(Button.AB)) {
+        return 3
+    } else if (input.buttonIsPressed(Button.A)) {
+        return 1
+    } else if (input.buttonIsPressed(Button.B)) {
+        return 2
+    } else {
+        return 0
+    }
+}
 function accelerationAmount (x: number, y: number) {
     return Math.trunc(Math.sqrt(x * x + y * y))
 }
-function calculateTransmitData (sector: number, amount: number) {
-    return buttonState() * 65536 + (amount * 16 + sector)
+function calculateTransmitData (sector: number, amount: number, bState: number) {
+    return bState * 65536 + (amount * 16 + sector)
 }
-function accelerationImage (sector: number) {
+function displayMovement (sector: number, bState: number) {
+    if (bState == 1) {
+        return images.createImage(`
+            . . . . .
+            . # # # .
+            # # . # .
+            . # # # .
+            . . . . .
+            `)
+    } else if (bState == 2) {
+        return images.createImage(`
+            . . . . .
+            . # # # .
+            . # . # #
+            . # # # .
+            . . . . .
+            `)
+    }
     if (sector == 1) {
         return images.createImage(`
             . . . . .
@@ -103,35 +131,26 @@ function accelerationImage (sector: number) {
 function accelerationAngle (x: number, y: number) {
     return Math.round(Math.atan2(y, x) * 180 / PI)
 }
-function buttonState () {
-    if (input.buttonIsPressed(Button.AB)) {
-        return 3
-    } else if (input.buttonIsPressed(Button.A)) {
-        return 1
-    } else if (input.buttonIsPressed(Button.B)) {
-        return 2
-    } else {
-        return 0
-    }
-}
 let accSector = 0
 let accAngle = 0
 let accAmount = 0
 let accY = 0
 let accX = 0
+let buttonState = 0
 let PI = 0
 radio.setGroup(0)
 radio.setTransmitPower(7)
 PI = 3.14159265359
 basic.forever(function () {
+    buttonState = calCButtonState()
     accX = input.acceleration(Dimension.X)
     accY = input.acceleration(Dimension.Y)
     accAmount = accelerationAmount(accX, accY)
     accAngle = accelerationAngle(accX, accY)
     accSector = accelerationSector(accAngle)
-    if (accAmount > 256) {
-        accelerationImage(accSector).showImage(0)
-        radio.sendNumber(calculateTransmitData(accAmount, accSector))
+    if (buttonState > 0 || accAmount > 256) {
+        displayMovement(accSector, buttonState).showImage(0)
+        radio.sendNumber(calculateTransmitData(accSector, accAmount, buttonState))
     } else {
         basic.showLeds(`
             . . . . .
