@@ -23,7 +23,7 @@ function accelerationAmount (x: number, y: number) {
     return Math.trunc(Math.sqrt(x * x + y * y))
 }
 function calculateTransmitData (sector: number, amount: number) {
-    return amount * 1000 + sector
+    return buttonState() * 65536 + (amount * 16 + sector)
 }
 function accelerationImage (sector: number) {
     if (sector == 1) {
@@ -102,6 +102,17 @@ function accelerationImage (sector: number) {
 }
 function accelerationAngle (x: number, y: number) {
     return Math.round(Math.atan2(y, x) * 180 / PI)
+}
+function buttonState () {
+    if (input.buttonIsPressed(Button.AB)) {
+        return 3
+    } else if (input.buttonIsPressed(Button.A)) {
+        return 1
+    } else if (input.buttonIsPressed(Button.B)) {
+        return 2
+    } else {
+        return 0
+    }
 }
 let accSector = 0
 let accAngle = 0
